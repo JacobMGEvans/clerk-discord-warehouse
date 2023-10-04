@@ -4,7 +4,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "xata": "xata codegen",
+    "xata:gen": "xata codegen",
     "postinstall": "npx @xata.io/cli@latest schema upload schema.template.json --branch main --create-only --yes"
   },
   "devDependencies": {
@@ -20,6 +20,7 @@
     "@xata.io/client": "^0.26.7",
     "next": "latest",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.3"
   }
 }

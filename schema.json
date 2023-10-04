@@ -1,0 +1,13 @@
+{
+  "tables": [
+    {
+      "name": "forum_posts",
+      "columns": [
+        { "name": "baseChannelID", "type": "string", "unique": true },
+        { "name": "threadPostTitle", "type": "string" },
+        { "name": "author", "type": "string" },
+        { "name": "messages", "type": "json" }
+      ]
+    }
+  ]
+}
