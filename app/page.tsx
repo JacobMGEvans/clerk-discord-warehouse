@@ -1,9 +1,19 @@
-import { getXataClient } from "../utils/xata.codegen";
 import { z } from "zod";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 export default async function Page() {
-  const xata = getXataClient();
-  const links = await xata.db.forum_posts.getAll();
+  const forumPosts = await prisma.forumPost.findMany({
+    include: {
+      messages: {
+        include: {
+          emojis: true,
+          images: true,
+        },
+      },
+    },
+  });
 
   const forumPostsValidator = z.object({
     id: z.string(),
@@ -41,7 +51,7 @@ export default async function Page() {
       </header>
       <article>
         <ul>
-          {links.map((forumPost) => {
+          {forumPosts.map((forumPost) => {
             const { id, threadPostTitle, author, messages } =
               forumPostsValidator.parse(forumPost);
             return (

@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getXataClient } from "../../utils/xata.codegen";
 
 const LINKS = [
   {
@@ -24,8 +23,6 @@ const LINKS = [
     url: "https://xata.io/discord",
   },
 ];
-
-const xata = getXataClient();
 
 export default async function writeLinksToXata(
   _req: NextApiRequest,
