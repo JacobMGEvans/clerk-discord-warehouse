@@ -1,10 +1,9 @@
-import { z } from "zod";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export default async function Page() {
-  const forumPosts = await prisma.forumPost.findMany({
+  const forumPosts = await prisma.thread.findMany({
     include: {
       messages: {
         include: {
@@ -15,35 +14,6 @@ export default async function Page() {
     },
   });
 
-  const forumPostsValidator = z.object({
-    id: z.string(),
-    threadPostTitle: z.string(),
-    author: z.string(),
-    messages: z.array(
-      z.optional(
-        z.object({
-          id: z.string(),
-          author: z.string(),
-          userID: z.string(),
-          content: z.string(),
-          emojis: z.array(
-            z.optional(
-              z.object({
-                animated: z.nullable(z.boolean()),
-                name: z.string(),
-                id: z.nullable(z.string()),
-                reaction: z.string(),
-                identifier: z.string(),
-              })
-            )
-          ),
-          images: z.array(z.optional(z.string())),
-          timestamp: z.number(),
-        })
-      )
-    ),
-  });
-
   return (
     <main>
       <header>
@@ -52,24 +22,26 @@ export default async function Page() {
       <article>
         <ul>
           {forumPosts.map((forumPost) => {
-            const { id, threadPostTitle, author, messages } =
-              forumPostsValidator.parse(forumPost);
+            const { id, threadPostTitle, author, messages } = forumPost;
             return (
               <li key={id}>
-                <h2>{threadPostTitle}</h2>
-                <h3>{author}</h3>
+                <h2>Title: {threadPostTitle}</h2>
+                <h3>AuthorID: {author}</h3>
 
-                <p>
+                <select>
                   {messages.map((obj) => {
                     return (
                       <div>
-                        {obj.images.map((url) => (
-                          <p>{url}</p>
+                        {obj.images.map(({ url, id }) => (
+                          <option key={id}>
+                            <h3>Image URL</h3>
+                            <p>{url}</p>
+                          </option>
                         ))}
                       </div>
                     );
                   })}
-                </p>
+                </select>
               </li>
             );
           })}

@@ -6,49 +6,45 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
-
 model Thread {
-  id              String   @id
-  threadPostTitle String
-  author          String
+  id              String    @id
+  threadPostTitle String? @db.LongText
+  author          String?
   messages        Message[]
-
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
 }
 
 model Message {
-  id        String   @id
+  id        String  @id
   author    String
   userID    String
-  content   String
+  content   String @db.LongText
+  timestamp String
+  threadId  String
+  thread    Thread  @relation(fields: [threadId], references: [id])
   emojis    Emoji[]
   images    Image[]
-  timestamp Int
-  thread    Thread   @relation(fields: [threadId], references: [id])
-  threadId  String
 
   @@index([threadId])
 }
 
 model Emoji {
   id         String   @id
-  animated   Boolean?
-  name       String
-  reaction   String
+  animated   Boolean
+  name       String?
   identifier String
-  message    Message   @relation(fields: [messageId], references: [id])
   messageId  String
+  message    Message  @relation(fields: [messageId], references: [id])
 
   @@index([messageId])
 }
 
 model Image {
-  id      String   @id
-  url     String
-  message Message? @relation(fields: [messageId], references: [id])
-  messageId String?
+  id        String   @id
+  url       String   @db.LongText
+  messageId String
+  message   Message  @relation(fields: [messageId], references: [id])
 
   @@index([messageId])
-  }
+}

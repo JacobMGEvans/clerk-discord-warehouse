@@ -4,7 +4,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prisma:gen": "prisma generate",
+    "db:push": "prisma db push",
     "prisma:migrate": "prisma migrate"
   },
   "devDependencies": {
