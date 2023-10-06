@@ -1,8 +1,11 @@
 import { PrismaClient } from "@prisma/client";
+import { useState } from "react";
 
 const prisma = new PrismaClient();
 
 export default async function Page() {
+  useState();
+
   const forumPosts = await prisma.thread.findMany({
     include: {
       messages: {
