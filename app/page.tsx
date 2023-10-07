@@ -28,10 +28,10 @@ export default async function Page({
     <main>
       <header>
         <h1>Clerk Discord Warehouse</h1>
+        <Suspense fallback={<div>Falling Back</div>}>
+          <SearchBar />
+        </Suspense>
       </header>
-      <Suspense fallback={<div>Falling Back</div>}>
-        <SearchBar />
-      </Suspense>
       <article>
         <ul>
           {forumPosts.map((forumPost) => {
@@ -41,20 +41,20 @@ export default async function Page({
                 <h2>Title: {threadPostTitle}</h2>
                 <h3>AuthorID: {author}</h3>
 
-                <select>
+                <section className={"grid grid-cols-1 gap-1.5 text-center"}>
                   {messages.map((obj) => {
                     return (
-                      <div>
+                      <article key={obj.id}>
                         {obj.images.map(({ url, id }) => (
-                          <option key={id}>
+                          <div key={id}>
                             <h3>Image URL</h3>
                             <p>{url}</p>
-                          </option>
+                          </div>
                         ))}
-                      </div>
+                      </article>
                     );
                   })}
-                </select>
+                </section>
               </li>
             );
           })}
