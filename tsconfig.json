@@ -22,9 +22,8 @@
       }
     ],
     "paths": {
-      "@/components": ["components"],
       "@/components/*": ["components/*"],
-      "@/lib": ["lib"]
+      "@/lib/utils": ["lib/utils"]
     }
   },
   "include": [
