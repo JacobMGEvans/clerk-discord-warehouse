@@ -1,18 +1,25 @@
+import { Suspense } from "react";
 import { PrismaClient } from "@prisma/client";
-import { useState } from "react";
+import SearchBar from "./search";
 
 const prisma = new PrismaClient();
 
-export default async function Page() {
-  useState();
-
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
   const forumPosts = await prisma.thread.findMany({
     include: {
       messages: {
         include: {
-          emojis: true,
           images: true,
         },
+      },
+    },
+    where: {
+      threadPostTitle: {
+        search: searchParams["threadPostTitle"],
       },
     },
   });
@@ -22,6 +29,9 @@ export default async function Page() {
       <header>
         <h1>Clerk Discord Warehouse</h1>
       </header>
+      <Suspense fallback={<div>Falling Back</div>}>
+        <SearchBar />
+      </Suspense>
       <article>
         <ul>
           {forumPosts.map((forumPost) => {
