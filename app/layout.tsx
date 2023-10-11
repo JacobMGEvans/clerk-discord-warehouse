@@ -1,4 +1,3 @@
-import "./styles/root.css";
 import "./styles/globals.css";
 
 const metas = {

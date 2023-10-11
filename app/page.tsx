@@ -1,5 +1,11 @@
 import { Suspense } from "react";
 import { PrismaClient } from "@prisma/client";
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from "@/components/ui/collapsible";
+
 import SearchBar from "./search";
 
 const prisma = new PrismaClient();
@@ -25,41 +31,46 @@ export default async function Page({
   });
 
   return (
-    <main>
-      <header>
-        <h1>Clerk Discord Warehouse</h1>
-        <Suspense fallback={<div>Falling Back</div>}>
+    <main className="container flex flex-col text-center">
+      <header className="text-center mt-10 mb-6 w-full">
+        <h1 className="text-4xl font-bold">Clerk Discord Warehouse</h1>
+        <Suspense fallback={<div className="mt-2">Falling Back</div>}>
           <SearchBar />
         </Suspense>
       </header>
-      <article>
-        <ul>
-          {forumPosts.map((forumPost) => {
-            const { id, threadPostTitle, author, messages } = forumPost;
-            return (
-              <li key={id}>
-                <h2>Title: {threadPostTitle}</h2>
-                <h3>AuthorID: {author}</h3>
+      {forumPosts.map((forumPost) => {
+        const { id, threadPostTitle, author, messages } = forumPost;
+        return (
+          <Collapsible key={id}>
+            <ul className="border border-gray-300 rounded-md p-4 mx-auto">
+              <CollapsibleTrigger className="flex justify-between items-baseulne">
+                <h2 className="text-xl font-bold">Title: {threadPostTitle}</h2>
+                <h3 className="text-lg">AuthorID: {author}</h3>
+              </CollapsibleTrigger>
 
-                <section className={"grid grid-cols-1 gap-1.5 text-center"}>
-                  {messages.map((obj) => {
-                    return (
-                      <article key={obj.id}>
-                        {obj.images.map(({ url, id }) => (
-                          <div key={id}>
-                            <h3>Image URL</h3>
-                            <p>{url}</p>
-                          </div>
-                        ))}
-                      </article>
-                    );
-                  })}
-                </section>
-              </li>
-            );
-          })}
-        </ul>
-      </article>
+              <CollapsibleContent className={"grid gap-1.5 text-center mt-4"}>
+                {messages.map((obj, idx) => {
+                  return (
+                    <article
+                      key={obj.id}
+                      className="border border-gray-200 rounded-md p-2"
+                    >
+                      <p className="block mb-1 font-bold">post {idx}</p>
+                      <p className="mb-2">{obj.content}</p>
+                      {obj.images.map(({ url, id }) => (
+                        <div key={id} className="mb-1">
+                          <b className="block mb-1">Image URL</b>
+                          <p>{url}</p>
+                        </div>
+                      ))}
+                    </article>
+                  );
+                })}
+              </CollapsibleContent>
+            </ul>
+          </Collapsible>
+        );
+      })}
     </main>
   );
 }
