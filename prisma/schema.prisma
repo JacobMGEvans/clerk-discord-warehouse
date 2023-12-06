@@ -1,53 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+model User {
+  id             String           @id @unique
+  imageUrl       String?
+  username       String?
+  firstName      String?
+  lastName       String?
+  email          String
+  banned         Boolean          @default(false)
+  deleted        Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  discordAccount DiscordAccount[]
+  onboarding     Onboarding[]
 }
+
+model DiscordAccount {
+  id           String         @id @unique @default(uuid())
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  username     String?
+  discordId    String         @unique
+  ticketStatus TicketStatus[]
+}
+
+model TicketStatus {
+  id          String         @id @unique @default(uuid())
+  msgId       String         @unique
+  status      String
+  type        String         @default("discord")
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  discordId   String
+  discordUser DiscordAccount @relation(fields: [discordId], references: [discordId])
+}
+
+model Log {
+  id        String   @id @default(uuid())
+  level     Int
+  message   String
+  error     String?  @db.LongText
+  createdAt DateTime @default(now())
+}
+
+model Onboarding {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  heardAbout String
+  other      String?
+  eap        Boolean
+  projects   Json
+  frameworks Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt()
+}
+
+// More Warehouse related models below
 model Thread {
   id              String    @id
-  threadPostTitle String? @db.LongText
-  author          String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  threadPostTitle String?   @db.LongText
+  authorId        String?
+  lastMessageId   String?
+  tags            Tag[]
   messages        Message[]
 
   @@fulltext([threadPostTitle])
 }
 
+model Tag {
+  id       String  @id
+  name     String?
+  tagId    String
+  threadId String
+  thread   Thread  @relation(fields: [threadId], references: [id])
+
+  @@index([threadId])
+}
+
 model Message {
-  id        String  @id
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   author    String
-  userID    String
-  content   String @db.LongText
+  userId    String
+  content   String   @db.LongText
   timestamp String
-  threadID  String
-  thread    Thread  @relation(fields: [threadID], references: [id])
+  threadId  String
+  thread    Thread   @relation(fields: [threadId], references: [id])
   emojis    Emoji[]
   images    Image[]
 
-  @@index([threadID])
+  @@index([threadId])
   @@fulltext([content])
 }
 
 model Emoji {
-  id         String   @id
+  id         String  @id
   animated   Boolean
   name       String?
   identifier String
-  messageID  String
-  message    Message  @relation(fields: [messageID], references: [id])
+  messageId  String
+  message    Message @relation(fields: [messageId], references: [id])
 
-  @@index([messageID])
+  @@index([messageId])
 }
 
 model Image {
-  id        String   @id
-  url       String   @db.LongText
-  messageID String
-  message   Message  @relation(fields: [messageID], references: [id])
+  id        String  @id
+  url       String  @db.LongText
+  messageId String
+  message   Message @relation(fields: [messageId], references: [id])
 
-  @@index([messageID])
+  @@index([messageId])
 }
