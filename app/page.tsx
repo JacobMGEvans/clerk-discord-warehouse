@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardContent,
   Card,
-} from "@/components/ui/card";
+} from "@/components/ui/Card";
 
 export default function Component() {
   return (
