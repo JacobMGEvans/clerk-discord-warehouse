@@ -7,20 +7,37 @@ import {
   CardHeader,
   CardContent,
   Card,
-} from "@/components/ui/Card";
+} from "@/components/ui/card";
+import { PrismaClient } from "@prisma/client";
 
-export default function Component() {
+const prisma = new PrismaClient();
+
+export default async function Threads({ searchParams }) {
+  const forumPosts = await prisma.thread.findMany({
+    include: {
+      messages: {
+        include: {
+          images: true,
+        },
+      },
+    },
+    where: {
+      threadPostTitle: {
+        search: searchParams["threadPostTitle"],
+      },
+    },
+  });
   return (
-    <div className="flex flex-col w-full min-h-screen">
-      <header className="flex items-center h-16 px-4 border-b shrink-0 md:px-6">
+    <div className="flex min-h-screen w-full flex-col">
+      <header className="flex h-16 shrink-0 items-center border-b px-4 md:px-6">
         <Link
           className="flex items-center gap-2 text-lg font-semibold sm:text-base"
           href="#"
         >
-          {/* <ClerkIcon className="w-6 h-6" /> */}
+          {/* <ClerkIcon className="w-6 h-6" />  Do a link back to the Discord possibly even the direct thread */}
           <span>Discord Threads</span>
         </Link>
-        <div className="flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4">
+        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
           <form className="flex-1">
             <Input
               className="bg-white dark:bg-gray-950"
@@ -32,23 +49,27 @@ export default function Component() {
           </form>
         </div>
       </header>
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] bg-gray-100/40 flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 dark:bg-gray-800/40">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto">
-          <Card>
-            <CardHeader className="flex flex-row items-center gap-4">
-              {/* <ClerkIcon className="w-8 h-8" /> */}
-              <div className="grid gap-1">
-                <CardTitle>Thread 1</CardTitle>
-                <CardDescription>Thread 1 Description</CardDescription>
-              </div>
-            </CardHeader>
-            <CardContent className="grid gap-2">
-              <Link className="text-sm font-semibold" href="#">
-                View Messages
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-gray-100/40 p-4 dark:bg-gray-800/40 md:gap-8 md:p-10">
+        {forumPosts.map((thread) => (
+          <div className="mx-auto grid w-full max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader className="flex flex-row items-center gap-4">
+                {/* <ClerkIcon className="w-8 h-8" /> */}
+                <div className="grid gap-1">
+                  <CardTitle>{thread.threadPostTitle}</CardTitle>
+                  <CardDescription>
+                    {thread.messages[0].content}
+                  </CardDescription>
+                </div>
+              </CardHeader>
+              <CardContent className="grid gap-2">
+                <Link className="text-sm font-semibold" href="#">
+                  View Messages
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        ))}
       </main>
     </div>
   );
