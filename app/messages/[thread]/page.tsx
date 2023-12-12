@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: { thread: string } }) {
         {/* Fill horizontal length and render Cards vertically  */}
         <div className="flex w-full flex-col space-y-4">
           {forumPost.messages.map((message) => (
-            <div className="flex w-full flex-col space-y-4">
+            <div className="flex w-full flex-col space-y-4" key={message.id}>
               <Card className="p-4">
                 <CardHeader className="flex items-center justify-between p-4">
                   <h2 className="text-xl font-semibold">{message.author}</h2>

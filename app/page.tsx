@@ -40,9 +40,18 @@ export default async function Threads({ searchParams }) {
         </Link>
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
           {/* Make this handle the user search and update the Prisma response */}
-          <form className="flex-1" action={console.log}>
+          <form
+            className="flex-1"
+            action={async (formData) => {
+              "use server";
+              console.log("FORMDATA", Object.fromEntries(formData.entries()));
+            }}
+          >
             <Input
               className="bg-white dark:bg-gray-950"
+              type="text"
+              id="search-id"
+              name="search"
               placeholder="Search threads..."
             />
             <Button className="sr-only" type="submit">
@@ -53,7 +62,10 @@ export default async function Threads({ searchParams }) {
       </header>
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-gray-100/40 p-4 dark:bg-gray-800/40 md:gap-8 md:p-10">
         {forumPosts.map((thread) => (
-          <div className="grid w-full max-w-6xl gap-6 self-center">
+          <div
+            className="grid w-full max-w-6xl gap-6 self-center"
+            key={thread.id}
+          >
             <Card>
               <CardHeader className="flex flex-row items-center gap-4">
                 {/* <ClerkIcon className="w-8 h-8" /> */}
