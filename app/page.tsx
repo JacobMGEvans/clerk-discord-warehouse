@@ -8,6 +8,7 @@ import {
   CardContent,
   Card,
 } from "@/components/ui/card";
+import slugify from "slugify";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -34,7 +35,7 @@ export default async function Threads({ searchParams }) {
           className="flex items-center gap-2 text-lg font-semibold sm:text-base"
           href="#"
         >
-          {/* <ClerkIcon className="w-6 h-6" />  Do a link back to the Discord possibly even the direct thread */}
+          {/* <ClerkIcon className="w-8 h-8" />  Do a link back to the Discord possibly even the direct thread */}
           <span>Discord Threads</span>
         </Link>
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
@@ -63,7 +64,12 @@ export default async function Threads({ searchParams }) {
                 </div>
               </CardHeader>
               <CardContent className="grid gap-2">
-                <Link className="text-sm font-semibold" href="#">
+                <Link
+                  className="text-sm font-semibold"
+                  href={`/messages/${slugify(
+                    `${thread.threadPostTitle}-${thread.id}`,
+                  )}`}
+                >
                   View Messages
                 </Link>
               </CardContent>
