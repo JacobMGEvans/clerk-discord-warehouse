@@ -1,5 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import Link from "next/link";
@@ -22,13 +20,13 @@ export default async function Page({ params }: { params: { thread: string } }) {
       id: params.thread.split("-").findLast((value) => Number(value) > 0),
     },
   });
+
   return (
     <>
       <div className="flex flex-row space-x-4">
         <Card className="w-64">
           <CardHeader className="flex items-center justify-between p-4">
             <h2 className="text-xl font-semibold">Threads</h2>
-            <Button>New thread</Button>
           </CardHeader>
           <CardContent className="space-y-4 p-4">
             <div className="flex items-start space-x-2">

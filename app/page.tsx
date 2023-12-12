@@ -52,7 +52,7 @@ export default async function Threads({ searchParams }) {
       </header>
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-gray-100/40 p-4 dark:bg-gray-800/40 md:gap-8 md:p-10">
         {forumPosts.map((thread) => (
-          <div className="mx-auto grid w-full max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid w-full max-w-6xl gap-6 self-center">
             <Card>
               <CardHeader className="flex flex-row items-center gap-4">
                 {/* <ClerkIcon className="w-8 h-8" /> */}
