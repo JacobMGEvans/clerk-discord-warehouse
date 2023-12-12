@@ -33,13 +33,14 @@ export default async function Threads({ searchParams }) {
       <header className="flex h-16 shrink-0 items-center border-b px-4 md:px-6">
         <Link
           className="flex items-center gap-2 text-lg font-semibold sm:text-base"
-          href="#"
+          href="/"
         >
           {/* <ClerkIcon className="w-8 h-8" />  Do a link back to the Discord possibly even the direct thread */}
           <span>Discord Threads</span>
         </Link>
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="flex-1">
+          {/* Make this handle the user search and update the Prisma response */}
+          <form className="flex-1" action={console.log}>
             <Input
               className="bg-white dark:bg-gray-950"
               placeholder="Search threads..."

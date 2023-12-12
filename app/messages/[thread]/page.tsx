@@ -21,6 +21,7 @@ export default async function Page({ params }: { params: { thread: string } }) {
     },
   });
 
+  // Add a similar Header search bar as the one in the Threads page
   return (
     <>
       <div className="flex flex-row space-x-4">
