@@ -2,31 +2,32 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 export default function SearchBar() {
   const router = useRouter();
-  const { threadPostTitle } = useParams();
+  const { search } = useParams();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    router.push(`?threadPostTitle=${value}`);
+    router.push(`?search=${value}`);
   };
 
   return (
-    <div className="flex w-full max-w-sm items-center">
-      <Label htmlFor="threadPostTitle">Forum Title: </Label>
+    <form className="flex-1">
       <Input
-        type="text"
-        name="threadPostTitle"
-        id="threadPostTitle"
-        value={threadPostTitle}
         onChange={handleChange}
+        className="bg-white dark:bg-gray-950"
+        type="text"
+        id="search-id"
+        name="search"
+        placeholder="Search threads..."
+        value={search}
       />
-
-      <Button type="submit">Clear</Button>
-    </div>
+      <Button className="sr-only" type="submit">
+        Submit
+      </Button>
+    </form>
   );
 }
