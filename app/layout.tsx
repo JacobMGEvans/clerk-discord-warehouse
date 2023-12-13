@@ -1,8 +1,9 @@
 import "@/app/styles/globals.css";
+import { Metadata } from "next";
 
-const metas = {
-  title: "",
-  description: "",
+export const metadata: Metadata = {
+  title: "Clerk Discord Warehouse",
+  description: "A repository for Clerk Support Discord Posts",
 };
 
 export default function RootLayout({
